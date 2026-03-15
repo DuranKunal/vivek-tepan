@@ -1,706 +1,872 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vairaagi-X — Official Site</title>
+  <meta name="description" content="Vairaagi-X — spiritual electronic artist fusing Indian classical with techno. Music, shows, and more." />
+  <meta property="og:title" content="Vairaagi-X" />
+  <meta property="og:image" content="og-image.jpg" />
+  <meta property="og:description" content="Beyond Sound. Beyond Self." />
+  <meta name="theme-color" content="#080808" />
 
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>VIVEK TEPAN</title>
-
-    <!-- CSS FILES -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;400;700&display=swap" rel="stylesheet">
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="css/bootstrap-icons.css" rel="stylesheet">
-
-    <link href="css/templatemo-festava-live.css" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,200;0,300;1,200;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <audio id="clickSound" src="static/sound/meme.mp3" preload="auto"></audio>
 
-    <main>
+  <!-- CURSOR (desktop only) -->
+  <div id="cursor"      aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"></div>
 
-        <!-- <header class="site-header">
-            <div class="container">
-                <div class="row">
+  <!-- LIGHTBOX -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button id="lightbox-close" aria-label="Close lightbox">✕</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
 
-                    <div class="col-lg-12 col-12 d-flex flex-wrap">
-                        <p class="d-flex me-4 mb-0">
-                            <strong class="text-dark">📞 Phone: 7469-481555
-                            </strong>
-                        </p>
-                    </div>
+  <!-- INTRO OVERLAY -->
+  <div id="intro-overlay" aria-hidden="true">
+    <button id="skip-intro" aria-label="Skip intro">Skip ↗</button>
+    <div id="intro-name" aria-label="Vairaagi-X"></div>
+    <div id="intro-line"></div>
+    <p id="intro-sub">Beyond Sound · Beyond Self</p>
+  </div>
 
-                </div>
+  <!-- CART SIDEBAR -->
+  <div id="cart-sidebar" aria-label="Shopping cart" role="dialog" aria-modal="true">
+    <div class="cart-header">
+      <span class="cart-title">Your Cart</span>
+      <button id="cart-close" aria-label="Close cart">✕</button>
+    </div>
+    <div id="cart-items"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <span id="cart-total-price">₹ 0</span>
+      </div>
+      <button class="btn" id="checkout-btn" style="width:100%;text-align:center;">Proceed to Checkout</button>
+      <p style="font-size:0.7rem;color:var(--text2);margin-top:1rem;text-align:center;letter-spacing:0.1em;">
+        Or email your order to <a href="mailto:vairaagix@gmail.com" style="color:var(--silver)">vairaagix@gmail.com</a>
+      </p>
+    </div>
+  </div>
+  <div id="cart-overlay-bg"></div>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="checkout-modal" role="dialog" aria-modal="true" aria-label="Checkout">
+    <div class="checkout-inner">
+      <button id="checkout-close" aria-label="Close checkout">✕</button>
+      <h2 class="checkout-title">Complete Your Order</h2>
+      <div id="checkout-order-summary"></div>
+      <form id="checkout-form">
+        <div class="form-field">
+          <label for="co-name">Full Name</label>
+          <input type="text" id="co-name" name="name" placeholder="Your name" required autocomplete="name" />
+        </div>
+        <div class="form-field">
+          <label for="co-email">Email</label>
+          <input type="email" id="co-email" name="email" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="form-field">
+          <label for="co-phone">Phone</label>
+          <input type="tel" id="co-phone" name="phone" placeholder="+91 XXXXX XXXXX" required autocomplete="tel" />
+        </div>
+        <div class="form-field">
+          <label for="co-address">Delivery Address</label>
+          <textarea id="co-address" name="address" placeholder="Street, City, State, PIN" required style="min-height:90px;resize:vertical;"></textarea>
+        </div>
+        <div class="payment-options">
+          <label class="payment-label">Payment Method</label>
+          <div class="payment-radio-group">
+            <label class="payment-radio">
+              <input type="radio" name="payment" value="card" checked /> Card
+            </label>
+            <label class="payment-radio">
+              <input type="radio" name="payment" value="upi" /> UPI
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn" style="width:100%;text-align:center;margin-top:0.5rem;">Pay &amp; Confirm Order</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div id="product-modal" role="dialog" aria-modal="true" aria-label="Product detail">
+    <div class="product-modal-inner">
+      <button id="product-modal-close" aria-label="Close product">✕</button>
+      <div class="product-modal-grid">
+        <div class="product-modal-img-wrap">
+          <div id="product-modal-img" class="product-modal-img"></div>
+        </div>
+        <div class="product-modal-info">
+          <span id="product-modal-tag" class="merch-tag"></span>
+          <h2 id="product-modal-name" class="product-modal-name"></h2>
+          <p id="product-modal-price" class="product-modal-price"></p>
+          <p id="product-modal-desc" class="product-modal-desc"></p>
+          <div class="size-selector" id="size-selector-wrap">
+            <label class="payment-label">Size</label>
+            <div id="size-options" class="size-options"></div>
+          </div>
+          <div class="qty-row">
+            <label class="payment-label">Qty</label>
+            <div class="qty-control">
+              <button id="qty-minus">−</button>
+              <span id="qty-value">1</span>
+              <button id="qty-plus">+</button>
             </div>
-        </header> -->
-
-
-        <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <a class="navbar-brand" href="index.html">
-                    Vivek Tepan
-                </a>
-
-                <!-- <a href="#section_2" class="btn custom-btn d-lg-none ms-auto me-4">Let's Start</a> -->
-
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav align-items-lg-center ms-auto me-lg-5">
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_1">Home</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_2">About</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_3">Gallery</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_4">Production</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_5">Services</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_6">Contact</a>
-                        </li>
-                    </ul>
-
-                    <!-- <a href="#section_2" class="btn custom-btn d-lg-block d-none">Let's Start</a> -->
-                </div>
-            </div>
-        </nav>
-
-
-        <section class="hero-section" id="section_1">
-            <div class="section-overlay"></div>
-
-            <div class="container d-flex justify-content-center align-items-center">
-                <div class="row">
-
-                    <div class="col-12 mt-auto mb-5 text-center">
-                        <small>🎵 Music Producer, Sound Engineer and DJ</small>
-
-                        <h1 class="text-white mb-5">Vivek Tepan</h1>
-
-                        <!-- <a class="btn custom-btn smoothscroll" href="#section_2">Let's begin</a> -->
-                    </div>
-
-                    <div class="col-lg-12 col-12 mt-auto d-flex flex-column flex-lg-row text-center">
-                        <div class="date-wrap">
-                            <!-- <h5 class="text-white">
-                                <i class="custom-icon bi-clock me-2"></i>
-                                10 - 12<sup>th</sup>, Dec 2023
-                            </h5> -->
-                        </div>
-
-                        <div class="location-wrap mx-auto py-3 py-lg-0">
-                            <h5 class="text-white">
-                                <i class="custom-icon bi-geo-alt me-2"></i>
-                                Address: MHADA 412 PMAY, New Link Road, Near Inorbit Mall, Pahadi Goregaon
-
-                            </h5>
-                        </div>
-
-                        <div class="social-share">
-                            <ul class="social-icon d-flex align-items-center justify-content-center">
-                                <span class="text-white me-3">Share:</span>
-
-                                <!-- <li class="social-icon-item">
-                                    <a href="#" class="social-icon-link">
-                                        <span class="bi-facebook"></span>
-                                    </a>
-                                </li>
-
-                                <li class="social-icon-item">
-                                    <a href="#" class="social-icon-link">
-                                        <span class="bi-twitter"></span>
-                                    </a>
-                                </li> -->
-
-                                <li class="social-icon-item">
-                                    <a href="https://www.instagram.com/vivektepan/" target="_blank"
-                                        class="social-icon-link">
-                                        <span class="bi-instagram"></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="video-wrap">
-                <video autoplay="" loop="" muted="" class="custom-video" poster="">
-                    <source src="video/pexels-2022395.mp4" type="video/mp4">
-
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-        </section>
-
-
-        <section class="about-section section-padding" id="section_2">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-12 mb-4 mb-lg-0 d-flex align-items-center">
-                        <div class="services-info">
-                            <h2 class="text-white mb-4">Tune Into My Story </h2>
-                            <p class="text-white">Creative and dynamic DJ and Music Producer with over 5 years of
-                                experience in the music industry. A
-                                distinguished graduate in Sound Engineering and Music Production from Point Blank Music
-                                School,
-                                London. Adept at blending innovative soundscapes with technical expertise, seeking to
-                                leverage skills in
-                                performing arts, audio engineering, and music production.
-                            </p>
-
-                            <h6 class="text-white mt-4">Educational Odyssey</h6>
-
-                            <p class="text-white">
-                            <ul>
-                                <li class="text-white">
-                                    <p class="text-white">BA (H) Music Production and Sound Engineering - Point Blank
-                                        Music School, London, 2023</p>
-                                </li>
-                                <li class="text-white">
-                                    <p class="text-white">B.Com (H) EAFM - Commerce College, Rajasthan University, 2018
-                                    </p>
-                                </li>
-                                <li class="text-white">
-                                    <p class="text-white">Certifications: Ableton Production, PRO-DJ Course Skratch DJ
-                                        Academy, New Delhi, 2016</p>
-                                </li>
-                            </ul>
-
-
-
-                            </p>
-
-
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-12">
-                        <div class="about-text-wrap">
-                            <img src="images/Dj/main1.webp" class="about-image img-fluid">
-
-                            <!-- <div class="about-text-info d-flex">
-                                <div class="d-flex">
-                                    <i class="about-text-icon bi-person"></i>
-                                </div>
-                                <div class="ms-4">
-                                    <h3>Happy moment</h3>
-                                    <p class="mb-0">Your amazing festival experience with us</p>
-                                </div>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- <section class="artists-section section-padding" id="section_3">
-            <div class="container">
-                <div class="row justify-content-center">
-
-                    <div class="col-12 text-center">
-                        <h2 class="mb-4">Photo's</h1>
-                    </div>
-
-                    <div class="col-lg-5 col-12">
-                        <div class="artists-thumb">
-                            <div class="artists-image-wrap">
-                                <img src="images/Dj/main23.jpg"
-                                    class="artists-image img-fluid">
-                            </div>
-
-                          
-                        </div>
-                    </div>
-
-                    <div class="col-lg-5 col-12">
-                        <div class="artists-thumb"  style="width: 88%; margin-bottom: 15px;">
-                            <div class="artists-image-wrap">
-                                <img src="images/Dj/main33.jpg"
-                                    class="artists-image img-fluid">
-                            </div>
-
-                          
-                        </div>
-
-                        <div class="artists-thumb"  style="width: 88%;">
-                            <img src="images/Dj/main444.jpg"
-                                class="artists-image img-fluid">
-
-                          
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section> -->
-
-
-        <!-- <section class="schedule-section section-padding" id="section_4">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-12 text-center">
-                        <h2 class="text-white mb-4">Concert Images</h1>
-
-                            <div class="table-responsive">
-                                <table class="schedule-table table table-dark">
-                                    <thead>
-                                        <tr>
-
-                                            <th scope="col"></th>
-
-                                            <th scope="col">Image's</th>
-
-                                            <th scope="col"></th>
-
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        <tr>
-
-                                            <td class="table-background-image-wrap pop-background-image">
-                                                <h3>Pop Night</h3>
-
-                                                <p class="mb-2">5:00 - 7:00 PM</p>
-
-                                                <p>By Adele</p>
-
-                                                <div class="section-overlay"></div>
-                                            </td>
-
-                                            <td style="background-color: #F3DCD4"></td>
-
-                                            <td class="table-background-image-wrap rock-background-image">
-                                                <h3>Rock & Roll</h3>
-
-                                                <p class="mb-2">7:00 - 11:00 PM</p>
-
-                                                <p>By Rihana</p>
-
-                                                <div class="section-overlay"></div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-
-                                            <td style="background-color: #ECC9C7"></td>
-
-                                            <td class="table-background-image-wrap main-background-image">
-                                                <h3>Rock & Roll</h3>
-
-                                                <p class="mb-2">7:00 - 11:00 PM</p>
-
-                                                <p>By Rihana</p>
-
-                                                <div class="section-overlay"></div>
-                                            </td>
-
-                                            <td style="background-color: #D9E3DA"></td>
-                                        </tr>
-
-                                        <tr>
-
-                                            <td class="table-background-image-wrap country-background-image">
-                                                <h3>Country Music</h3>
-
-                                                <p class="mb-2">4:30 - 7:30 PM</p>
-
-                                                <p>By Rihana</p>
-
-                                                <div class="section-overlay"></div>
-                                            </td>
-
-                                            <td style="background-color: #D1CFC0"></td>
-
-                                            <td class="table-background-image-wrap main-r-background-image">
-                                                <h3>Pop Night</h3>
-
-                                                <p class="mb-2">5:00 - 7:00 PM</p>
-
-                                                <p>By Adele</p>
-
-                                                <div class="section-overlay"></div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </section> -->
-
-        <section class=" mt-3" id="section_3">
-            <div class="services_section layout_padding">
-                <div class="container">
-                    <h2 class="text-center mb-3">Gallery</h2>
-                    <div class="services_section_2">
-                        <div class="row ">
-                            <div class="col-md-4">
-                                <div><img src="images/Dj/main5.webp" class="services_img rounded mb-3" height="305">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div><img src="images/Dj/main6.webp" class="services_img rounded mb-3" height="305">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div><img src="images/Dj/main444.jpg" class="services_img rounded mb-3" height="305">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col-md-4">
-                                <div><img src="images/Dj/main8.webp" class="services_img rounded mb-3" height="300">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div><img src="images/Dj/main33.jpg" class="services_img rounded mb-3" height="300">
-                                </div>
-                            </div>
-                            <div class="col-md-4 ">
-                                <div><img src="images/Dj/main10.webp" class="services_img rounded mb-3 shadow"
-                                        height="300"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="my-3 " id="section_4">
-            <div class="services_section layout_padding">
-                <div class="container">
-                    <h2 class="text-center mb-4">Production Portfollo</h2>
-                    <div class=" row my-3 justify-content-center">
-
-                        <div class=" col-md-4  justify-content-center" style="height: 16rem;">
-                            <div class="video-container "><iframe class="rounded" style="width: 100%; height: 15rem;"
-                                    src="https://www.youtube.com/embed/E6-GuniO4OA?si=Rs7JZbtTgIHG-utO" frameborder="0"
-                                    allow="autoplay; encrypted-media" allowfullscreen="" title="video"></iframe></div>
-                        </div>
-                        <div class=" col-md-4 justify-content-center" style="height: 16rem;">
-                            <div class="video-container "><iframe class="rounded" style="width: 100%; height: 15rem;"
-                                    src="https://www.youtube.com/embed/S2uNHUhqH48?si=UqR7KYGjusrBfUqW" frameborder="0"
-                                    allow="autoplay; encrypted-media" allowfullscreen="" title="video"></iframe></div>
-                        </div>
-                        <div class=" col-md-4 justify-content-center" style="height: 16rem;">
-                            <div class="video-container "><iframe class="rounded" style="width: 100%; height: 15rem;"
-                                    src="https://www.youtube.com/embed/CrfGVg879Dc?si=VpVupyhk549hPtSD" frameborder="0"
-                                    allow="autoplay; encrypted-media" allowfullscreen="" title="video"></iframe></div>
-                        </div>
-                        <div class=" col-md-4 justify-content-center" style="height: 16rem;">
-                            <div class="video-container "><iframe class="rounded" style="width: 100%; height: 15rem;"
-                                    src="https://www.youtube.com/embed/DWu3gYZHgC4?si=lDDYaz1HtbYN_azF" frameborder="0"
-                                    allow="autoplay; encrypted-media" allowfullscreen="" title="video"></iframe></div>
-                        </div>
-                        <div class=" col-md-4 justify-content-center" style="height: 16rem;">
-                            <div class="video-container "><iframe class="rounded" style="width: 100%; height: 15rem;"
-                                    src="https://www.youtube.com/embed/M3v9aVXcuGI?si=EDyGuhpEnDuHmsm7" frameborder="0"
-                                    allow="autoplay; encrypted-media" allowfullscreen="" title="video"></iframe></div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-            <div class="container shadow rounded p-3" style="background-color: #080808;">
-                <div class="row">
-
-
-                    <div class="col-lg-6 col-12">
-                        <div class="about-text-wrap">
-                            <img src="images/Dj/main5.webp" class="about-image img-fluid">
-
-                            <!-- <div class="about-text-info d-flex">
-                            <div class="d-flex">
-                                <i class="about-text-icon bi-person"></i>
-                            </div>
-                            <div class="ms-4">
-                                <h3>Happy moment</h3>
-                                <p class="mb-0">Your amazing festival experience with us</p>
-                            </div>
-                        </div> -->
-                        </div>
-                    </div>
-
-
-                    <div class="col-lg-6 col-12 mb-4 mb-lg-0 d-flex justify-content-center">
-                        <div class="services-info">
-                            <h2 class="text-white mb-4">Music </h2>
-                            <div class="my-1">
-
-                                <audio controls>
-                                    <source src="images/yogi shiva mahadev mastered.mp3" type="audio/mpeg">
-                                </audio>
-                            </div>
-                            <div class="my-1">
-
-                                <audio controls>
-                                    <source src="images/horror.mp3" type="audio/mpeg">
-                                </audio>
-                            </div>
-                            <div class="my-1">
-
-                                <audio controls>
-                                    <source src="images/war.mp3" type="audio/mpeg">
-                                </audio>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-
-
-        <section class="pricing-section section-padding section-bg" id="section_5">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-8 col-12 mx-auto">
-                        <h2 class="text-center mb-4">Services </h2>
-                    </div>
-
-
-                    <div class="col-lg-12 col-12 mt-4 mt-lg-0">
-                        <div class="pricing-thumb">
-
-
-                            <ul class="row mt-2">
-                                <div class="col-md-6">
-
-                                    <li class="pricing-list-item text-black">
-                                        <h3><small>
-                                                Audio Mixing
-                                            </small></h3>
-                                    </li>
-                                    <li class="pricing-list-item text-black">
-                                        <h3><small>
-                                                Mastering
-                                            </small></h3>
-                                    </li>
-                                    <li class="pricing-list-item text-black">
-                                        <h3><small>
-                                                DJ Bookings
-                                            </small></h3>
-                                    </li>
-                                </div>
-                                <div class="col-md-6">
-
-                                    <li class="pricing-list-item text-black">
-                                        <h3><small>
-                                               Studio Recordings
-                                            </small></h3>
-                                    </li>
-
-                                    <li class="pricing-list-item text-black">
-                                        <h3><small>
-                                                Music For Films, TV, Games, Commercial
-                                            </small></h3>
-                                    </li>
-                                </div>
-
-
-
-                            </ul>
-
-
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-
-        <section class="contact-section section-padding" id="section_6">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-11 col-12 mx-auto">
-                        <h2 class="text-center">Contact Us</h2>
-
-
-                        <section id="contact" class="contact">
-
-                            <div class="" data-aos="fade-up">
-                                <div class="row gy-4">
-
-                                    <div class="py-3">
-
-                                        <div class="row gy-4 justify-content-around p-2">
-                                            <div class="col-md-5 p-3 rounded shadow-lg ">
-                                                <div class="info-box text-center">
-                                                    <i class="bi bi-geo-alt color-r"></i>
-                                                    <h3>Address</h3>
-                                                    <p>5 MHADA 412 PMAY, New Link Road, Pahadi Goregaon,<br> Mumbai <br></p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5 p-3 rounded shadow-lg">
-                                                <div class="info-box text-center">
-                                                    <i class="bi bi-telephone color-r"></i>
-                                                    <h3>Call Us</h3>
-                                                    <p>+91 8854844334
-                                                        <!-- <br>+1 6678 254445 41 -->
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5 p-3 rounded shadow-lg">
-                                                <div class="info-box text-center">
-                                                    <i class="bi bi-envelope color-r"></i>
-                                                    <h3>Email Us</h3>
-                                                    <p>vivektepan97@gmail.com
-
-                                                        <!-- <br>contact@example.com -->
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-5 p-3 rounded shadow-lg">
-                                                <div class="info-box text-center">
-                                                    <i class="bi bi-clock color-r"></i>
-                                                    <h3>Open Hours</h3>
-                                                    <p>Monday - Saturday<br>9:00AM - 05:00PM</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                        </section>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-    </main>
-
-
-    <footer class="site-footer pt-4">
-
-
-        <div class="container">
-            <div class="row">
-
-                <div class="col-lg-6 col-12 mb-4 pb-2">
-                    <h5 class="site-footer-title mb-3">Links</h5>
-
-                    <ul class="site-footer-links">
-                        <li class="site-footer-link-item">
-                            <a href="/" class="site-footer-link">Home</a>
-                        </li>
-
-                        <li class="site-footer-link-item">
-                            <a href="#section_2" class="site-footer-link">About</a>
-                        </li>
-
-                        <li class="site-footer-link-item">
-                            <a href="#section_3" class="site-footer-link">Gallery</a>
-                        </li>
-                        <li class="site-footer-link-item">
-                            <a href="#section_4" class="site-footer-link">Production</a>
-                        </li>
-
-                        <li class="site-footer-link-item">
-                            <a href="#section_5" class="site-footer-link">Services</a>
-                        </li>
-
-                        <li class="site-footer-link-item">
-                            <a href="#section_6" class="site-footer-link">Contact</a>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-12 mb-4 mb-lg-0">
-                    <h5 class="site-footer-title mb-3">Have a question?</h5>
-
-                    <p class="text-white d-flex mb-1">
-                        <a href="tel: 746-948-1555" class="site-footer-link">
-                            0885-484-4334
-                        </a>
-                    </p>
-
-                    <p class="text-white d-flex">
-                        <a href="mailto:vivektepan97@gmail.com
-                        " class="site-footer-link">
-                            vivektepan97@gmail.com
-
-                        </a>
-                    </p>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-11 mb-4 mb-lg-0 mb-md-0">
-                    <h5 class="site-footer-title mb-3">Location</h5>
-
-                    <p class="text-white d-flex mt-3 mb-2">
-                        MHADA 412 PMAY, New Link Road, Near Inorbit Mall, Pahadi Goregaon</p>
-
-
-                </div>
-            </div>
+          </div>
+          <button class="btn" id="add-to-cart-btn" style="width:100%;text-align:center;margin-top:0.5rem;">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORDER CONFIRMED MODAL -->
+  <div id="order-confirmed-modal" role="dialog" aria-modal="true" aria-label="Order confirmed">
+    <div class="order-confirmed-inner">
+      <div class="order-check">✓</div>
+      <h2 class="order-confirmed-title">Order Confirmed</h2>
+      <p class="order-confirmed-sub">Thank you for your order. A confirmation will be sent to your email. We'll be in touch soon.</p>
+      <button class="btn" id="order-confirmed-close" style="margin-top:2rem;">Back to Store</button>
+    </div>
+  </div>
+
+  <!-- FULL STORY PAGE (hidden, shown on button click) -->
+ <!-- FULL STORY PAGE (hidden, shown on button click) -->
+<div id="story-page" aria-label="Full Story" role="dialog">
+  <div class="story-page-header">
+    <button id="story-page-close" aria-label="Close full story">← Back</button>
+    <span class="story-page-label">The Full Story</span>
+  </div>
+
+  <!-- Stage 1 -->
+  <div class="story-stage" data-stage="1">
+    <div class="story-stage-bg" style="background-image:url('static/images/story/stage1-jaipur.jpg')"></div>
+    <div class="story-stage-content">
+      <div class="story-stage-number">01</div>
+      <h2 class="story-stage-title">The Foundations</h2>
+      <h3 class="story-stage-subtitle">"A Spark in Jaipur"</h3>
+      <div class="story-stage-text">
+        <p>
+          Born in the vibrant city of Jaipur in 1997, the musical roots of vairaagi-x were planted early.
+          Growing up without a formal musical background in the family, his earliest education came from the
+          radio — absorbing raw Rajasthani folk, classic Hindi pop, and the traditional sounds of the desert.
+          When his family got the first computer in his neighborhood, his sonic world blew wide open. Exposure
+          to global pop, hip-hop, and eventually seeing a video of a Tomorrowland afterparty sparked a massive
+          realization: he didn't just want to listen to electronic music — he wanted to be the one behind the
+          decks creating it.
+        </p>
+        <div class="story-stage-images">
+          <!-- REPLACE: swap placeholders with real images from your Drive folder -->
+          <div class="story-img-placeholder" aria-label="Jaipur cityscape">Jaipur — The Pink City</div>
+          <div class="story-img-placeholder" aria-label="Old radio">Old Radio — The First Sound</div>
+        </div>
+        <p>
+          With his father's unwavering support pushing him to chase the dream, he balanced completing a
+          commerce degree with learning the art of DJing at Skratch DJ Academy in Delhi. Returning to Jaipur,
+          he cut his teeth in the local circuit. To please the crowds, he played commercial Bollywood and
+          Punjabi tracks, eventually landing massive gigs — including an 8,000-person event just before the
+          world paused in 2020. But beneath the surface, a different rhythm was calling. He wanted more than
+          just playing other people's hits. He wanted to engineer his own sound.
+        </p>
+        <div class="story-stage-images">
+          <!-- REPLACE: add early DJ images -->
+          <div class="story-img-placeholder" aria-label="Early DJ setup">Early DJ Days — Jaipur</div>
+          <div class="story-img-placeholder" aria-label="Large gig">8,000-Person Show — 2020</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 2 -->
+  <div class="story-stage" data-stage="2">
+    <div class="story-stage-bg" style="background-image:url('static/images/story/stage2-london.jpg')"></div>
+    <div class="story-stage-content">
+      <div class="story-stage-number">02</div>
+      <h2 class="story-stage-title">The London Years</h2>
+      <h3 class="story-stage-subtitle">"Mastering the Craft"</h3>
+      <div class="story-stage-text">
+        <p>
+          Determined to evolve from a DJ into a true producer, vairaagi-x relocated to London to study Sound
+          Engineering at the prestigious Point Blank Music School. Over three years, he immersed himself in
+          the science of sound — mastering SSL mixing consoles, diving deep into Ableton and Logic, and
+          studying microphone techniques, sound design, and composition for film and TV.
+        </p>
+        <div class="story-stage-images">
+          <!-- REPLACE: add London images -->
+          <div class="story-img-placeholder" aria-label="London skyline">London — The Electric City</div>
+          <div class="story-img-placeholder" aria-label="Club">Underground Club Culture</div>
+        </div>
+        <p>
+          In London, he finally got to spin the music he loved: techno, house, and Afrobeats. The crowds
+          connected with his energy, but the reality of living in the UK soon took its toll. Despite holding
+          a post-study work visa, the relentless grind of working in betting shops, making pizzas, and
+          bartending just to pay the bills left him with no time to actually make music. Realizing that
+          surviving wasn't the same as living, he made a bold choice: he walked away from his visa, packed
+          his bags, and returned to India to reclaim his art.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 3 -->
+  <div class="story-stage" data-stage="3">
+    <div class="story-stage-bg" style="background-image:url('static/images/story/stage3-awakening.jpg')"></div>
+    <div class="story-stage-content">
+      <div class="story-stage-number">03</div>
+      <h2 class="story-stage-title">The Awakening</h2>
+      <h3 class="story-stage-subtitle">"Finding the vairaagi-x Sound"</h3>
+      <div class="story-stage-text">
+        <p>
+          Returning home marked a massive spiritual and creative turning point. Rediscovering Indian classical
+          and Rajasthani music, he realized his true calling was to merge the heavy, driving beats of
+          underground house and techno with the ancient sounds of his homeland.
+        </p>
+        <div class="story-stage-images">
+          <!-- REPLACE: add spiritual images — Isha Foundation, Shiva, etc. -->
+          <div class="story-img-placeholder" aria-label="Isha Foundation">Isha Foundation — The Turning Point</div>
+          <div class="story-img-placeholder" aria-label="Shiva">Inspired by the Energy of Shiva</div>
+        </div>
+        <p>
+          This creative shift coincided with a deep spiritual awakening. Through programs at the Isha
+          Foundation, he experienced the profound ecstasy of mystic sounds. Inspired by the energy of Shiva,
+          Devi, and the teachings of Sadhguru, his production took on a higher purpose — shifting his focus
+          from simply making people dance to elevating their consciousness. He began producing tracks like
+          the <em>Yogi Shiva Mahadev EDM Version</em>, moving to Mumbai to expand his technical repertoire:
+          producing for theatre, doing foley and sound design for film pitch decks, while simultaneously
+          developing his own releases.
+        </p>
+        <div class="story-stage-images">
+          <!-- REPLACE: add spiritual / studio images -->
+          <div class="story-img-placeholder" aria-label="Music and spiritual energy">Sound as Spiritual Energy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 4 -->
+  <div class="story-stage" data-stage="4">
+    <div class="story-stage-bg" style="background-image:url('static/images/story/stage4-identity.jpg')"></div>
+    <div class="story-stage-content">
+      <div class="story-stage-number">04</div>
+      <h2 class="story-stage-title">The Identity &amp; Ethos</h2>
+      <h3 class="story-stage-subtitle">"The Sound of Untethered Freedom"</h3>
+      <div class="story-stage-text">
+        <p>
+          The name vairaagi-x represents this entire transformation. A <em>vairaagi</em> is one who is
+          unbound — someone who has stepped beyond the illusions of the world and is completely free to go
+          anywhere and do anything. This freedom is visually anchored by the snake in his logo, an ancient
+          symbol inextricably linked to mysticism and the coiled, awakening energy of Kundalini.
+        </p>
+        <div class="story-stage-images">
+          <!-- REPLACE: add VX identity / logo / live images -->
+          <div class="story-img-placeholder" aria-label="VX logo">The Snake — Symbol of Awakening</div>
+          <div class="story-img-placeholder" aria-label="VX live">vairaagi-x Live</div>
+        </div>
+        <p>
+          Today, vairaagi-x operates entirely outside the standard club constraints. Avoiding typical
+          alcohol-heavy venues, he focuses on purpose-driven sets and uploading immersive indie techno
+          performances. With heavily anticipated releases on the horizon — including his long-developed track
+          <em>"Kahe Sataae"</em> and a hard-hitting techno rendition of the <em>Hanuman Chalisa</em> —
+          vairaagi-x isn't just a DJ or a producer. He is a storyteller, translating the ancient, untethered
+          spirit of India into a frequency built for the modern world.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <!-- MOBILE MENU -->
+  <nav id="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
+    <a href="#release" onclick="closeMobileMenu()">Platforms</a>
+    <a href="#about"   onclick="closeMobileMenu()">Story</a>
+    <a href="#music"   onclick="closeMobileMenu()">Sound</a>
+    <a href="#shows"   onclick="closeMobileMenu()">Live</a>
+    <a href="#gallery" onclick="closeMobileMenu()">Moments</a>
+    <a href="#contact" onclick="closeMobileMenu()">Connect</a>
+  </nav>
+
+  <!-- ── NAVIGATION ───────────────────────────────────── -->
+  <header id="nav" role="banner">
+    <!-- REPLACE: swap src with actual logo file path -->
+    <a href="#" class="nav-logo" aria-label="Vairaagi-X Home">
+      <img src="static/images/logo.JPG" alt="Vairaagi-X Logo" class="nav-logo-img" />
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="#release">Platforms</a></li>
+      <li><a href="#about">Story</a></li>
+      <li><a href="#music">Sound</a></li>
+      <li><a href="#shows">Live</a></li>
+      <li><a href="#gallery">Moments</a></li>
+      <li><a href="#contact">Connect</a></li>
+    </ul>
+    <div class="nav-right">
+      <button id="cart-btn" class="cart-btn" aria-label="Open cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span id="cart-count" class="cart-count">0</span>
+      </button>
+      <button id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section id="hero" aria-label="Hero">
+    <div id="hero-sticky">
+      <div id="hero-bg" aria-hidden="true"></div>
+      <div class="hero-content">
+        <h1 id="hero-name">VAIRAAGI-X</h1>
+        <p  id="hero-tagline">Beyond Sound. Beyond Self.</p>
+        <div class="hero-ctas">
+          <a href="#videos" class="btn"       aria-label="Watch videos">Watch</a>
+          <a href="#music"  class="btn btn-ghost" aria-label="Listen to music">Listen</a>
+        </div>
+      </div>
+      <div id="scroll-indicator" aria-hidden="true">
+        <span>Scroll</span>
+        <div class="chevron"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MARQUEE ───────────────────────────────────────── -->
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-inner">
+      <span>VAIRAAGI-X</span><span>·</span><span>SPIRITUAL</span><span>·</span>
+      <span>ELECTRONIC</span><span>·</span><span>BORDERLESS</span><span>·</span>
+      <span>HOUSE</span><span>·</span><span>TECHNO</span><span>·</span>
+      <span>INDIAN CLASSICAL</span><span>·</span><span>BEYOND SELF</span><span>·</span>
+      <span>VAIRAAGI-X</span><span>·</span><span>SPIRITUAL</span><span>·</span>
+      <span>ELECTRONIC</span><span>·</span><span>BORDERLESS</span><span>·</span>
+      <span>HOUSE</span><span>·</span><span>TECHNO</span><span>·</span>
+      <span>INDIAN CLASSICAL</span><span>·</span><span>BEYOND SELF</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- ── LATEST RELEASE / PLATFORMS ──────────────────── -->
+  <section id="release" aria-label="Platforms">
+    <div class="container">
+      <span class="section-label reveal">Platforms</span>
+      <div class="release-grid">
+
+        <div class="release-artwork reveal-scale">
+          <img src="static/images/logo.JPG" alt="Vairaagi-X artwork" />
         </div>
 
-        <div class="site-footer-bottom">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-lg-3 col-12 mt-4">
-                        <p class="copyright-text">Copyright © <a href="https://duranz.in" target="_blank">Duranz</a> IT
-                            Company</p>
-                        <p class="copyright-text">Distributed by: <a href="https://duranz.in" target="_blank">Kunal ,
-                                Rahul</a></p>
-                    </div>
-
-
-                </div>
-            </div>
+        <div class="release-info">
+          <p class="release-meta reveal" style="transition-delay:.1s">2025 · Single · Electronic / Spiritual</p>
+          <h2 class="release-title reveal" style="transition-delay:.15s">Dissolution</h2>
+          <p class="release-desc reveal" style="transition-delay:.2s">
+            A meditative descent into the space between breath and beat.
+            Dissolution weaves tabla fragments with sub-bass frequencies,
+            channeling the ancient and the futuristic into one suspended moment.
+          </p>
+          <!-- Social media platform links -->
+          <div class="social-platform-row reveal" style="transition-delay:.25s">
+            <a href="https://www.instagram.com/vairaagi_x?igsh=MWo5b2d2cXZiY2FlZg%3D%3D&utm_source=qr" class="social-platform-btn" aria-label="Instagram" rel="noopener" target="_blank">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+              Instagram
+            </a>
+            <a href="https://open.spotify.com/user/31rhq7tewwjj4ax2qkgy2kqb6ira?si=Wkpj0OBnS7u7RqWC6RZmWg" class="social-platform-btn" aria-label="Spotify" rel="noopener" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 01-.277-1.215c3.809-.87 7.077-.496 9.713 1.115a.623.623 0 01.206.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.467-1.49c3.635-1.138 8.147-.587 11.247 1.327a.78.78 0 01.257 1.072zm.105-2.835C14.691 8.95 9.375 8.775 6.297 9.71a.937.937 0 11-.543-1.793c3.521-1.068 9.375-.861 13.072 1.347a.937.937 0 01-.912 1.603z"/></svg>
+              Spotify
+            </a>
+            <a href="https://youtube.com/@vairaagi_x?si=MU-Qy9V-abuXXmlA" class="social-platform-btn" aria-label="YouTube" rel="noopener" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              YouTube
+            </a>
+            <a href="https://on.soundcloud.com/MWwuYUY9KqRJ9z4a6j" class="social-platform-btn" aria-label="SoundCloud" rel="noopener" target="_blank">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M1.175 12.225c-.017 0-.034 0-.051.001a.48.48 0 00-.468.482l-.157 2.293.157 2.274a.48.48 0 00.519.48c.283-.015.51-.263.51-.546v-4.428a.497.497 0 00-.51-.556zm2.147-.754a.558.558 0 00-.557.558l-.177 3.054.177 2.866a.558.558 0 001.115 0l.202-2.866-.202-3.054a.558.558 0 00-.558-.558zm2.178-.329a.629.629 0 00-.629.629l-.157 3.383.157 2.733a.629.629 0 001.258 0l.178-2.733-.178-3.383a.629.629 0 00-.629-.629zm2.208-.177a.699.699 0 00-.699.699l-.135 3.56.135 2.614a.699.699 0 001.398 0l.152-2.614-.152-3.56a.699.699 0 00-.699-.699zM11.85 9.007c-.387 0-.7.313-.7.7l-.113 3.446.113 2.507a.7.7 0 001.4 0l.128-2.507-.128-3.446a.7.7 0 00-.7-.7zm2.249-.655c-.423 0-.765.342-.765.765l-.09 3.99.09 2.394a.765.765 0 001.53 0l.101-2.394-.101-3.99a.765.765 0 00-.765-.765zm2.291-.207c-.459 0-.831.372-.831.831l-.067 4.197.067 2.264a.831.831 0 001.662 0l.076-2.264-.076-4.197a.831.831 0 00-.831-.831zM18.58 7.5a.897.897 0 00-.897.897l-.045 4.756.045 2.134a.897.897 0 001.794 0l.051-2.134-.051-4.756A.897.897 0 0018.58 7.5zm2.34.449a.963.963 0 00-.963.963l-.022 4.241.022 2.003a.963.963 0 001.926 0l.025-2.003-.025-4.241a.963.963 0 00-.963-.963zm1.624 2.093c-.19-.095-.414-.149-.652-.149a1.67 1.67 0 00-.516.082 4.3 4.3 0 00-4.272-3.826 4.25 4.25 0 00-1.622.323v8.657h8.128a1.91 1.91 0 001.908-1.91 1.91 1.91 0 00-2.974-1.177z"/></svg>
+              SoundCloud
+            </a>
+          </div>
         </div>
-    </footer>
 
+      </div>
+    </div>
+  </section>
 
+  <!-- ── ABOUT / STORY ────────────────────────────────── -->
+  <section id="about" aria-label="About Vairaagi-X">
+    <div id="about-sticky">
+      <div class="about-bg" aria-hidden="true"></div>
+      <div class="about-left">
+        <span class="section-label">The Story</span>
+        <div id="bio-lines" aria-label="Artist biography">
+          <span class="bio-line">Jaipur roots. London tech. Cosmic frequency.</span>
+          <span class="bio-line">Vairaagi-X is the sonic bridge where the ancient</span>
+          <span class="bio-line">dust of Rajasthan meets the industrial pulse</span>
+          <span class="bio-line">of underground techno.</span>
+          <span class="bio-line">&nbsp;</span>
+          <span class="bio-line" style="transition-delay:.1s">After mastering sound engineering at London's</span>
+          <span class="bio-line" style="transition-delay:.15s">Point Blank Music School and finding spiritual</span>
+          <span class="bio-line" style="transition-delay:.2s">clarity at the Isha Foundation, he returned</span>
+          <span class="bio-line" style="transition-delay:.25s">to India to reclaim a higher frequency.</span>
+          <span class="bio-line">&nbsp;</span>
+          <span class="bio-line" style="transition-delay:.3s">He doesn't just play sets — he engineers experiences.</span>
+          <span class="bio-line" style="transition-delay:.35s">From the driving grit of his techno Hanuman Chalisa</span>
+          <span class="bio-line" style="transition-delay:.4s">to the atmospheric depth of "Kahe Sataae,"</span>
+          <span class="bio-line" style="transition-delay:.45s">his music is world-class production fused</span>
+          <span class="bio-line" style="transition-delay:.5s">with raw, desert-soaked mysticism.</span>
+        </div>
+        <blockquote class="about-pull-quote" id="pull-quote">
+          "No constraints. No conventions.<br>Just the sound."
+        </blockquote>
+        <!-- "See Full Story" button -->
+        <button id="open-story-btn" class="btn btn-story-link" style="margin-top:2.5rem;" aria-label="Open full story">
+          See Full Story ↗
+        </button>
+      </div>
+    </div>
+  </section>
 
-    <!-- JAVASCRIPT FILES -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.sticky.js"></script>
-    <script src="js/click-scroll.js"></script>
-    <script src="js/custom.js"></script>
+  <!-- ── MARQUEE 2 ─────────────────────────────────────── -->
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-inner" style="animation-direction:reverse;animation-duration:30s">
+      <span>HOUSE</span><span>·</span><span>TECHNO</span><span>·</span>
+      <span>BOLLYWOOD FUSION</span><span>·</span><span>INDIE</span><span>·</span>
+      <span>INDIAN CLASSICAL</span><span>·</span><span>SPIRITUAL</span><span>·</span>
+      <span>ELECTRONIC</span><span>·</span><span>VAIRAAGI-X</span><span>·</span>
+      <span>HOUSE</span><span>·</span><span>TECHNO</span><span>·</span>
+      <span>BOLLYWOOD FUSION</span><span>·</span><span>INDIE</span><span>·</span>
+      <span>INDIAN CLASSICAL</span><span>·</span><span>SPIRITUAL</span><span>·</span>
+      <span>ELECTRONIC</span><span>·</span><span>VAIRAAGI-X</span><span>·</span>
+    </div>
+  </div>
 
+  <!-- ── MUSIC — SOUND ────────────────────────────────── -->
+  <section id="music" aria-label="Music">
+    <div class="container">
+      <span class="section-label reveal">Discography</span>
+      <h2 class="section-title reveal" style="transition-delay:.1s">Sound</h2>
+      <div class="music-grid">
+
+        <div class="track-card reveal-left" aria-label="Track: Jaipurtronic">
+          <div class="track-artwork" role="img">
+            <img src="static/images/music/m4.JPG" alt="Jaipurtronic artwork" />
+          </div>
+          <div class="track-info">
+            <span class="track-title">Jaipurtronic</span>
+            <span class="track-label">2025 · Electronic / Spiritual</span>
+            <div class="track-platforms">
+              <a href="https://on.soundcloud.com/GORK5nedluRHDEtPUc" rel="noopener" target="_blank">Soundcloud</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="track-card reveal-right" style="transition-delay:.1s" aria-label="Track: Indie-Techno DJ Set">
+          <div class="track-artwork" role="img">
+            <img src="static/images/music/m1.JPG" alt="Indie-Techno DJ Set artwork" />
+          </div>
+          <div class="track-info">
+            <span class="track-title">Indie-Techno DJ Set</span>
+            <span class="track-label">2024 · Indian Classical Techno</span>
+            <div class="track-platforms">
+              <a href="https://on.soundcloud.com/lDLbwbOqdcpwTxl2DS" rel="noopener" target="_blank">Soundcloud</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="track-card reveal-left" style="transition-delay:.2s" aria-label="Track: Pushkar Mela">
+          <div class="track-artwork" role="img">
+            <img src="static/images/music/m2.JPG" alt="Pushkar Mela artwork" />
+          </div>
+          <div class="track-info">
+            <span class="track-title">Pushkar Mela</span>
+            <span class="track-label">2024 · Deep House / Ambient</span>
+            <div class="track-platforms">
+              <a href="https://on.soundcloud.com/6c1xT2reJ433OJnLUi" rel="noopener" target="_blank">Soundcloud</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="track-card reveal-right" style="transition-delay:.3s" aria-label="Track: Woke-up in the city of Lakes">
+          <div class="track-artwork" role="img">
+            <img src="static/images/music/m3.JPG" alt="Woke-up in the city of Lakes artwork" />
+          </div>
+          <div class="track-info">
+            <span class="track-title">Woke-up in the city of Lakes</span>
+            <span class="track-label">2023 · Bollywood · Indie Electronic</span>
+            <div class="track-platforms">
+              <a href="https://on.soundcloud.com/fmZXnhHoB4ppEeHzVV" rel="noopener" target="_blank">Soundcloud</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="track-card reveal-left" style="transition-delay:.4s" aria-label="Track: Dissolution">
+          <div class="track-artwork" role="img">
+            <img src="static/images/logo.JPG" alt="Dissolution artwork" />
+          </div>
+          <div class="track-info">
+            <span class="track-title">Dissolution</span>
+            <span class="track-label">2025 · Electronic / Spiritual</span>
+            <div class="track-platforms">
+              <a href="https://open.spotify.com/user/31rhq7tewwjj4ax2qkgy2kqb6ira?si=Wkpj0OBnS7u7RqWC6RZmWg" rel="noopener" target="_blank">Spotify</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="track-card reveal-right" style="transition-delay:.5s" aria-label="Track: Kahe Sataae">
+          <div class="track-artwork" role="img">
+            <div style="width:100%;height:100%;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--border);font-size:0.6rem;letter-spacing:0.2em;">ART</div>
+          </div>
+          <div class="track-info">
+            <span class="track-title">Kahe Sataae</span>
+            <span class="track-label">2024 · Spiritual Electronic</span>
+            <div class="track-platforms">
+              <!-- REPLACE: add link when available -->
+              <a href="#music">SoundCloud</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VIDEOS — VISION ──────────────────────────────── -->
+  <section id="videos" aria-label="Videos" style="background:var(--surface1)">
+    <div class="container">
+      <h2 class="section-title reveal" style="transition-delay:.1s">Videos</h2>
+
+      <!-- Tab Navigation -->
+      <div class="video-tabs reveal" style="transition-delay:.15s">
+        <button class="video-tab active" data-tab="djsets">DJ Sets</button>
+        <button class="video-tab" data-tab="musicvideos">Music Videos</button>
+      </div>
+
+      <!-- DJ Sets -->
+      <div class="videos-grid video-tab-pane active" id="tab-djsets">
+        <div class="video-card" aria-label="DJ Set: Dissolution">
+          <iframe src="https://www.youtube.com/embed/yzIkAXTG4fM" title="Dissolution — Official Video" loading="lazy" allowfullscreen></iframe>
+          <div class="video-overlay">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <span class="video-title">Dissolution</span>
+          </div>
+        </div>
+        <div class="video-card" style="transition-delay:.15s" aria-label="DJ Set: Nada Brahma">
+          <iframe src="https://www.youtube.com/embed/J5iBj9j-Nv4" title="Nada Brahma — Live Set" loading="lazy" allowfullscreen></iframe>
+          <div class="video-overlay">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <span class="video-title">Nada Brahma Live</span>
+          </div>
+        </div>
+        <div class="video-card" style="transition-delay:.3s" aria-label="DJ Set: Indie Techno">
+          <iframe src="https://www.youtube.com/embed/J5iBj9j-Nv4" title="Indie Techno DJ Set" loading="lazy" allowfullscreen></iframe>
+          <div class="video-overlay">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <span class="video-title">Indie Techno Set</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Music Videos -->
+      <div class="videos-grid video-tab-pane" id="tab-musicvideos" style="display:none;">
+        <div class="video-card" aria-label="Music Video: Dissolution">
+          <iframe src="https://www.youtube.com/embed/yzIkAXTG4fM" title="Dissolution — Official Video" loading="lazy" allowfullscreen></iframe>
+          <div class="video-overlay">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <span class="video-title">Dissolution</span>
+          </div>
+        </div>
+        <div class="video-card" style="transition-delay:.15s" aria-label="Music Video: Shoonya">
+          <iframe src="https://www.youtube.com/embed/J5iBj9j-Nv4" title="Shoonya — Studio Session" loading="lazy" allowfullscreen></iframe>
+          <div class="video-overlay">
+            <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+            <span class="video-title">Shoonya</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SHOWS — LIVE ──────────────────────────────────── -->
+  <section id="shows" aria-label="Shows">
+    <div class="container">
+      <span class="section-label reveal">Tour</span>
+      <h2 class="section-title reveal" style="transition-delay:.1s">Live</h2>
+      <!-- REPLACE: update show dates, venues, cities, and ticket links as new shows are added -->
+      <table class="shows-table" aria-label="Upcoming shows">
+        <thead>
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Venue</th>
+            <th scope="col">City</th>
+            <th scope="col">Tickets</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="show-row">
+            <td>14 Mar 2025</td>
+            <td>Fabric</td>
+            <td>London, UK</td>
+            <td><a href="#" class="btn" style="font-size:.65rem;padding:.5rem 1.2rem" rel="noopener" aria-label="Tickets for Fabric London">Tickets</a></td>
+          </tr>
+          <tr class="show-row" style="transition-delay:.15s">
+            <td>28 Mar 2025</td>
+            <td>Elsewhere</td>
+            <td>New York, US</td>
+            <td><a href="#" class="btn" style="font-size:.65rem;padding:.5rem 1.2rem" rel="noopener" aria-label="Tickets for Elsewhere New York">Tickets</a></td>
+          </tr>
+          <tr class="show-row" style="transition-delay:.3s">
+            <td>12 Apr 2025</td>
+            <td>Watergate <span class="sold-out-badge">Sold</span></td>
+            <td>Berlin, DE</td>
+            <td><span class="btn btn-ghost" style="font-size:.65rem;padding:.5rem 1.2rem">Sold Out</span></td>
+          </tr>
+          <tr class="show-row" style="transition-delay:.45s">
+            <td>03 May 2025</td>
+            <td>Bhavans</td>
+            <td>Mumbai, IN</td>
+            <td><a href="#" class="btn" style="font-size:.65rem;padding:.5rem 1.2rem" rel="noopener" aria-label="Tickets for Bhavans Mumbai">Tickets</a></td>
+          </tr>
+          <tr class="show-row" style="transition-delay:.6s">
+            <td>TBA</td>
+            <td>TBA</td>
+            <td>Jaipur, IN</td>
+            <td><span class="btn btn-ghost" style="font-size:.65rem;padding:.5rem 1.2rem">Announced Soon</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── GALLERY — MOMENTS ────────────────────────────── -->
+  <section id="gallery" aria-label="Gallery" style="background:var(--surface1)">
+    <div class="container">
+      <span class="section-label reveal">Photography</span>
+      <h2 class="section-title reveal" style="transition-delay:.1s">Moments</h2>
+      <!-- Horizontal scroll gallery with hover captions -->
+      <div class="gallery-scroll-wrap">
+        <div class="gallery-scroll" id="gallery-scroll">
+
+          <div class="gallery-item" data-src="static/images/moments/1.PNG" data-caption="Jaipur — Where it all began" role="button" tabindex="0" aria-label="Gallery photo 1">
+            <img src="static/images/moments/1.PNG" alt="Moment 1" loading="lazy" />
+            <div class="gallery-caption">Jaipur — Where it all began</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/2.PNG" data-caption="London underground — finding the pulse" role="button" tabindex="0" aria-label="Gallery photo 2">
+            <img src="static/images/moments/2.PNG" alt="Moment 2" loading="lazy" />
+            <div class="gallery-caption">London underground — finding the pulse</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/3.JPG" data-caption="Isha Foundation — the awakening" role="button" tabindex="0" aria-label="Gallery photo 3">
+            <img src="static/images/moments/3.JPG" alt="Moment 3" loading="lazy" />
+            <div class="gallery-caption">Isha Foundation — the awakening</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/10.JPG" data-caption="In the studio — building worlds" role="button" tabindex="0" aria-label="Gallery photo 4">
+            <img src="static/images/moments/10.JPG" alt="Moment 4" loading="lazy" />
+            <div class="gallery-caption">In the studio — building worlds</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/5.JPG" data-caption="Live — becoming the music" role="button" tabindex="0" aria-label="Gallery photo 5">
+            <img src="static/images/moments/5.JPG" alt="Moment 5" loading="lazy" />
+            <div class="gallery-caption">Live — becoming the music</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/6.JPG" data-caption="Between sets — the silence before the storm" role="button" tabindex="0" aria-label="Gallery photo 6">
+            <img src="static/images/moments/6.JPG" alt="Moment 6" loading="lazy" />
+            <div class="gallery-caption">Between sets — the silence before the storm</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/7.PNG" data-caption="Berlin — the cathedral of techno" role="button" tabindex="0" aria-label="Gallery photo 7">
+            <img src="static/images/moments/7.PNG" alt="Moment 7" loading="lazy" />
+            <div class="gallery-caption">Berlin — the cathedral of techno</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/8.JPG" data-caption="Desert ritual — Rajasthan after midnight" role="button" tabindex="0" aria-label="Gallery photo 8">
+            <img src="static/images/moments/8.JPG" alt="Moment 8" loading="lazy" />
+            <div class="gallery-caption">Desert ritual — Rajasthan after midnight</div>
+          </div>
+          <div class="gallery-item" data-src="static/images/moments/9.PNG" data-caption="Pushkar Mela — the universe dancing" role="button" tabindex="0" aria-label="Gallery photo 9">
+            <img src="static/images/moments/9.PNG" alt="Moment 9" loading="lazy" />
+            <div class="gallery-caption">Pushkar Mela — the universe dancing</div>
+          </div>
+
+        </div>
+        <!-- Scroll hint arrows -->
+        <button class="gallery-scroll-arrow left" id="gallery-arrow-left" aria-label="Scroll gallery left">‹</button>
+        <button class="gallery-scroll-arrow right" id="gallery-arrow-right" aria-label="Scroll gallery right">›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MERCHANDISE ───────────────────────────────────── -->
+  <section id="merch" aria-label="Merchandise">
+    <div class="container">
+      <span class="section-label reveal">Merchandise</span>
+      <h2 class="section-title reveal" style="transition-delay:.1s">Wear</h2>
+
+      <div class="merch-grid">
+
+        <div class="merch-card reveal-scale" aria-label="Dissolution Tee" style="transition-delay:.05s" 
+          data-name="Dissolution Tee" data-tag="Apparel" data-price="1200" data-price-gbp="22"
+          data-desc="Premium organic cotton tee featuring the Dissolution artwork. A wearable piece of sound." data-sizes="S,M,L,XL,XXL">
+          <div class="merch-image" aria-hidden="true">
+            <!-- REPLACE: <img src="merch-tee.jpg" alt="Dissolution Tee" loading="lazy" /> -->
+            <span class="merch-img-placeholder">Photo</span>
+          </div>
+          <div class="merch-info">
+            <span class="merch-tag">Apparel</span>
+            <span class="merch-name">Dissolution Tee</span>
+            <span class="merch-price">₹ 1,200 / £ 22</span>
+          </div>
+        </div>
+
+        <div class="merch-card reveal-scale" aria-label="Vairaagi-X Hoodie" style="transition-delay:.12s"
+          data-name="VX Hoodie" data-tag="Apparel" data-price="2800" data-price-gbp="45"
+          data-desc="Heavyweight oversized hoodie. The VX serpent logo embroidered on the chest. Designed for the eternal wanderer." data-sizes="S,M,L,XL,XXL">
+          <div class="merch-image" aria-hidden="true">
+            <span class="merch-img-placeholder">Photo</span>
+          </div>
+          <div class="merch-info">
+            <span class="merch-tag">Apparel</span>
+            <span class="merch-name">VX Hoodie</span>
+            <span class="merch-price">₹ 2,800 / £ 45</span>
+          </div>
+        </div>
+
+        <div class="merch-card reveal-scale" aria-label="Nada Brahma Vinyl" style="transition-delay:.2s"
+          data-name="Nada Brahma 12&quot;" data-tag="Vinyl · Limited to 200" data-price="3500" data-price-gbp="28"
+          data-desc="Limited pressing of 200. Hand-numbered. The universe is sound — hold it in your hands." data-sizes="">
+          <div class="merch-image" aria-hidden="true">
+            <span class="merch-img-placeholder">Photo</span>
+          </div>
+          <div class="merch-info">
+            <span class="merch-tag">Vinyl · Limited to 200</span>
+            <span class="merch-name">Nada Brahma 12"</span>
+            <span class="merch-price">₹ 3,500 / £ 28</span>
+          </div>
+        </div>
+
+        <div class="merch-card reveal-scale" aria-label="Shoonya Tote Bag" style="transition-delay:.1s"
+          data-name="Shoonya Tote" data-tag="Accessories" data-price="800" data-price-gbp="14"
+          data-desc="Heavy canvas tote. Shoonya — the void — printed in Cinzel. Carry your emptiness beautifully." data-sizes="One Size">
+          <div class="merch-image" aria-hidden="true">
+            <span class="merch-img-placeholder">Photo</span>
+          </div>
+          <div class="merch-info">
+            <span class="merch-tag">Accessories</span>
+            <span class="merch-name">Shoonya Tote</span>
+            <span class="merch-price">₹ 800 / £ 14</span>
+          </div>
+        </div>
+
+        <div class="merch-card reveal-scale merch-sold-out" aria-label="Beyond Self Cap — Sold Out" style="transition-delay:.18s"
+          data-name="Beyond Self Cap" data-tag="Accessories" data-price="0" data-price-gbp="0" data-desc="" data-sizes="">
+          <div class="merch-image" aria-hidden="true">
+            <span class="merch-badge">Sold Out</span>
+            <span class="merch-img-placeholder">Photo</span>
+          </div>
+          <div class="merch-info">
+            <span class="merch-tag">Accessories</span>
+            <span class="merch-name">Beyond Self Cap</span>
+            <span class="merch-price" style="color:var(--border)">Sold Out</span>
+          </div>
+        </div>
+
+        <div class="merch-card reveal-scale" aria-label="Dissolution Art Print" style="transition-delay:.25s"
+          data-name="Dissolution Print" data-tag="Print · A2 · Signed" data-price="1800" data-price-gbp="20"
+          data-desc="A2 signed art print of the Dissolution artwork. Limited run. Archival quality. Hand-signed by VX." data-sizes="A2">
+          <div class="merch-image" aria-hidden="true">
+            <span class="merch-img-placeholder">Photo</span>
+          </div>
+          <div class="merch-info">
+            <span class="merch-tag">Print · A2 · Signed</span>
+            <span class="merch-name">Dissolution Print</span>
+            <span class="merch-price">₹ 1,800 / £ 20</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEWSLETTER ────────────────────────────────────── -->
+  <section id="newsletter" aria-label="Newsletter signup">
+    <div class="container">
+      <h2 class="newsletter-title reveal">Stay in Frequency.</h2>
+      <p class="newsletter-sub reveal" style="transition-delay:.1s">Releases · Shows · Direct to your consciousness.</p>
+      <!-- REPLACE: action="#" → your Mailchimp / Klaviyo / Buttondown URL -->
+      <form class="newsletter-form reveal" style="transition-delay:.2s" action="#" method="post" aria-label="Newsletter signup">
+        <input class="newsletter-input" type="email" name="EMAIL" placeholder="your@email.com" required aria-label="Email address" autocomplete="email" />
+        <button class="newsletter-btn" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ── CONTACT — CONNECT ─────────────────────────────── -->
+  <section id="contact" aria-label="Contact">
+    <div class="container">
+      <span class="section-label reveal">Get in Touch</span>
+      <h2 class="section-title reveal" style="transition-delay:.1s">Connect</h2>
+      <div class="contact-grid">
+
+        <div class="contact-left reveal" style="transition-delay:.15s">
+          <h3>For bookings, press &amp; collaborations</h3>
+          <p>
+            Reach out for booking inquiries, press requests,
+            collaboration proposals, or to share what the music has opened within you.<br><br>
+            <strong style="color:var(--silver)"><a href="mailto:vairaagix@gmail.com" style="color:var(--silver)">vairaagix@gmail.com</a></strong>
+          </p>
+          <div class="social-links" role="list" aria-label="Social media">
+            <a href="https://www.instagram.com/vairaagi_x?igsh=MWo5b2d2cXZiY2FlZg%3D%3D&utm_source=qr" class="social-link" aria-label="Instagram"  rel="noopener" target="_blank">IG</a>
+            <a href="https://open.spotify.com/user/31rhq7tewwjj4ax2qkgy2kqb6ira?si=Wkpj0OBnS7u7RqWC6RZmWg" class="social-link" aria-label="Spotify" rel="noopener" target="_blank">SP</a>
+            <a href="https://youtube.com/@vairaagi_x?si=MU-Qy9V-abuXXmlA" class="social-link" aria-label="YouTube" rel="noopener" target="_blank">YT</a>
+            <a href="https://on.soundcloud.com/MWwuYUY9KqRJ9z4a6j" class="social-link" aria-label="SoundCloud" rel="noopener" target="_blank">SC</a>
+          </div>
+        </div>
+
+        <!-- REPLACE: action="#" → your Formspree endpoint -->
+        <form class="contact-form" action="#" method="POST" aria-label="Contact form">
+          <div class="form-field reveal" style="transition-delay:.2s">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name" />
+          </div>
+          <div class="form-field reveal" style="transition-delay:.3s">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="your@email.com" required autocomplete="email" />
+          </div>
+          <div class="form-field reveal" style="transition-delay:.4s">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject" required aria-label="Subject category">
+              <option value="" disabled selected>Select a subject</option>
+              <option value="booking">Booking</option>
+              <option value="press">Press</option>
+              <option value="collaboration">Collaboration</option>
+              <option value="general">General</option>
+            </select>
+          </div>
+          <div class="form-field reveal" style="transition-delay:.5s">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Your message..." required></textarea>
+          </div>
+          <button type="submit" class="btn reveal" style="transition-delay:.6s;align-self:flex-start">
+            Send Message
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────── -->
+  <footer id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">Vairaagi-X</span>
+        <ul class="footer-nav" role="list">
+          <li><a href="#music">Sound</a></li>
+          <li><a href="#shows">Live</a></li>
+          <li><a href="#contact">Connect</a></li>
+        </ul>
+        <span class="footer-copy">© 2025 Vairaagi-X. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
 </body>
-
 </html>
