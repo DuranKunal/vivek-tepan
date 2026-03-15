@@ -1208,3 +1208,12 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
   .story-stage-images { grid-template-columns: 1fr; }
   .checkout-inner { padding: 2rem 1.25rem; }
 }
+
+/* WhatsApp Order Button */
+.btn-whatsapp {
+  border-color: #25D366;
+  color: #25D366;
+  text-decoration: none;
+}
+.btn-whatsapp::before { background: #25D366; }
+.btn-whatsapp:hover { color: #000; border-color: #25D366; }
