@@ -156,10 +156,14 @@ body {
   width: auto;
   object-fit: contain;
   display: block;
-  /* Fallback if logo image path doesn't exist yet */
-  filter: brightness(0) invert(1);
-  /* REPLACE: remove filter once a proper transparent-background logo is supplied */
 }
+
+@media (max-width: 768px) {
+  .nav-logo-img {
+    height: 32px;
+  }
+}
+
 .nav-links {
   display: flex; gap: 2.5rem; list-style: none;
 }
@@ -633,20 +637,19 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
 }
 .video-card.visible { transform: perspective(800px) rotateY(0) rotateX(0); }
 .video-card:hover   { box-shadow: 0 20px 60px rgba(0,0,0,0.6); transform: scale(1.02) !important; }
-.video-card iframe  { position: absolute; inset: 0; width: 100%; height: 100%; border: none; pointer-events: none; }
-.video-overlay {
-  position: absolute; inset: 0;
-  background: rgba(8,8,8,0.7);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
-  transition: opacity 0.3s;
+.video-card iframe  { position: absolute; inset: 0; width: 100%; height: 100%; border: none; pointer-events: all; }
+
+/* WhatsApp order button */
+.btn-whatsapp {
+  background: transparent;
+  border-color: #25D366;
+  color: #25D366;
 }
-.video-card:hover .video-overlay { opacity: 0; }
-.play-icon {
-  width: 48px; height: 48px; border: 1.5px solid var(--silver); border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+.btn-whatsapp:hover {
+  background: rgba(37,211,102,0.08);
+  border-color: #25D366;
+  color: #25D366;
 }
-.play-icon svg { fill: var(--silver); width: 14px; height: 14px; margin-left: 3px; }
-.video-title { font-family: var(--font-head); font-size: 0.85rem; letter-spacing: 0.15em; color: var(--silver); text-transform: uppercase; }
 
 /* =====================================================
    SHOWS — LIVE
@@ -998,85 +1001,6 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
   color: var(--silver);
 }
 
-/* =====================================================
-   CHECKOUT MODAL
-===================================================== */
-#checkout-modal {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.95);
-  z-index: 9600;
-  display: flex; align-items: center; justify-content: center;
-  padding: 1.5rem;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.35s;
-  overflow-y: auto;
-}
-#checkout-modal.open { opacity: 1; pointer-events: all; }
-.checkout-inner {
-  background: var(--surface1); border: 1px solid var(--border);
-  max-width: 560px; width: 100%;
-  padding: 3rem;
-  position: relative;
-}
-#checkout-close {
-  position: absolute; top: 1.2rem; right: 1.2rem;
-  background: none; border: 1px solid var(--border);
-  color: var(--text2); cursor: pointer;
-  width: 36px; height: 36px; font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: color 0.2s, border-color 0.2s;
-}
-#checkout-close:hover { border-color: var(--silver); color: var(--silver); }
-.checkout-title {
-  font-family: var(--font-head); font-size: 1.6rem;
-  font-weight: 300; letter-spacing: 0.15em;
-  margin-bottom: 2rem;
-}
-#checkout-order-summary {
-  background: var(--surface2); border: 1px solid var(--border);
-  padding: 1.25rem 1.5rem; margin-bottom: 2rem;
-  font-size: 0.82rem; line-height: 2; color: var(--text2);
-}
-#checkout-form { display: flex; flex-direction: column; gap: 1.2rem; }
-.payment-options { display: flex; flex-direction: column; gap: 0.6rem; }
-.payment-radio-group { display: flex; gap: 1.5rem; }
-.payment-radio {
-  display: flex; align-items: center; gap: 0.5rem;
-  font-size: 0.82rem; color: var(--text2); cursor: pointer;
-  letter-spacing: 0.05em;
-}
-.payment-radio input[type="radio"] { accent-color: var(--silver); cursor: pointer; }
-
-/* =====================================================
-   ORDER CONFIRMED MODAL
-===================================================== */
-#order-confirmed-modal {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.97);
-  z-index: 9700;
-  display: flex; align-items: center; justify-content: center;
-  padding: 2rem;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.35s;
-}
-#order-confirmed-modal.open { opacity: 1; pointer-events: all; }
-.order-confirmed-inner {
-  text-align: center; max-width: 420px;
-}
-.order-check {
-  width: 72px; height: 72px; border-radius: 50%;
-  border: 1px solid var(--silver);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 2rem; color: var(--silver);
-  margin: 0 auto 2rem;
-}
-.order-confirmed-title {
-  font-family: var(--font-head); font-size: clamp(1.8rem, 5vw, 3rem);
-  font-weight: 300; letter-spacing: 0.2em; margin-bottom: 1.25rem;
-}
-.order-confirmed-sub {
-  font-size: 0.9rem; line-height: 1.8; color: var(--text2);
-}
 
 /* =====================================================
    NEWSLETTER
@@ -1206,14 +1130,4 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
   .show-row td   { padding-left: 0; padding-right: 0.5rem; }
 
   .story-stage-images { grid-template-columns: 1fr; }
-  .checkout-inner { padding: 2rem 1.25rem; }
 }
-
-/* WhatsApp Order Button */
-.btn-whatsapp {
-  border-color: #25D366;
-  color: #25D366;
-  text-decoration: none;
-}
-.btn-whatsapp::before { background: #25D366; }
-.btn-whatsapp:hover { color: #000; border-color: #25D366; }

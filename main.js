@@ -231,17 +231,7 @@ function initVideoCards() {
     });
   });
 
-  // Click to activate
-  document.querySelectorAll('.video-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const iframe  = card.querySelector('iframe');
-      const overlay = card.querySelector('.video-overlay');
-      overlay.style.opacity = '0';
-      overlay.style.pointerEvents = 'none';
-      iframe.style.pointerEvents = 'all';
-      iframe.src = iframe.src;
-    });
-  });
+
 }
 
 /* =====================================================
@@ -362,8 +352,15 @@ function initCart() {
   if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => {
       if (cart.length === 0) return;
-      closeCart();
-      openCheckout();
+      const waNumber = '918854844334';
+      const lines = cart.map(i =>
+        `• ${i.name}${i.size ? ' (' + i.size + ')' : ''} × ${i.qty} — ₹${(i.price * i.qty).toLocaleString('en-IN')}`
+      ).join('\n');
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const msg = encodeURIComponent(
+        `Hi! I'd like to place an order:\n\n${lines}\n\n*Total: ₹${total.toLocaleString('en-IN')}*\n\nPlease confirm availability and share payment details.`
+      );
+      window.open(`https://wa.me/${waNumber}?text=${msg}`, '_blank', 'noopener');
     });
   }
 
@@ -379,29 +376,12 @@ function initProductModal() {
   const modal        = document.getElementById('product-modal');
   const closeBtn     = document.getElementById('product-modal-close');
   const addToCartBtn = document.getElementById('add-to-cart-btn');
-  const waBtn        = document.getElementById('whatsapp-order-btn');
   const qtyMinus     = document.getElementById('qty-minus');
   const qtyPlus      = document.getElementById('qty-plus');
   const qtyVal       = document.getElementById('qty-value');
   let currentProduct = null;
   let selectedSize   = '';
   let qty = 1;
-
-  // REPLACE: your WhatsApp number with country code, no + or spaces
-  const waNumber = '919XXXXXXXXX'; // e.g. 919876543210
-
-  function buildWhatsAppLink() {
-    if (!currentProduct) return '#';
-    const text = encodeURIComponent(
-      `Hi! I'd like to order from vairaagi-x:\n\n` +
-      `*Product:* ${currentProduct.name}\n` +
-      `*Size:* ${selectedSize || 'N/A'}\n` +
-      `*Quantity:* ${qty}\n` +
-      `*Price:* ₹${(currentProduct.price * qty).toLocaleString('en-IN')}\n\n` +
-      `Please confirm availability and share payment details.`
-    );
-    return `https://wa.me/${waNumber}?text=${text}`;
-  }
 
   function openProductModal(card) {
     const isSoldOut = card.classList.contains('merch-sold-out');
@@ -413,27 +393,31 @@ function initProductModal() {
       price:    parseInt(card.dataset.price),
       priceGbp: card.dataset.priceGbp,
       desc:     card.dataset.desc,
-      sizes:    card.dataset.sizes
-                  ? card.dataset.sizes.split(',').map(s => s.trim()).filter(Boolean)
-                  : []
+      sizes:    card.dataset.sizes ? card.dataset.sizes.split(',').map(s => s.trim()).filter(Boolean) : []
     };
     selectedSize = currentProduct.sizes[0] || '';
     qty = 1;
 
-    // Populate modal fields
-    document.getElementById('product-modal-tag').textContent   = currentProduct.tag;
-    document.getElementById('product-modal-name').textContent  = currentProduct.name;
-    document.getElementById('product-modal-price').textContent =
-      `₹ ${currentProduct.price.toLocaleString('en-IN')} / £ ${currentProduct.priceGbp}`;
-    document.getElementById('product-modal-desc').textContent  = currentProduct.desc;
-    document.getElementById('product-modal-img').textContent   = 'Photo';
+    document.getElementById('product-modal-tag').textContent  = currentProduct.tag;
+    document.getElementById('product-modal-name').textContent = currentProduct.name;
+    document.getElementById('product-modal-price').textContent = `₹ ${currentProduct.price.toLocaleString('en-IN')} / £ ${currentProduct.priceGbp}`;
+    document.getElementById('product-modal-desc').textContent = currentProduct.desc;
     if (qtyVal) qtyVal.textContent = 1;
 
-    // Size buttons
-    const sizeWrap = document.getElementById('size-selector-wrap');
-    const sizeOpts = document.getElementById('size-options');
-    sizeOpts.innerHTML = '';
+    function refreshWhatsAppLink() {
+    const waBtn = document.getElementById('order-whatsapp-btn');
+    if (!waBtn || !currentProduct) return;
+    const waNumber = '918854844334'; // REPLACE: your WhatsApp number with country code, no +
+    const msg = encodeURIComponent(
+      `Hi! I'd like to order:\n*${currentProduct.name}*${selectedSize ? ' — Size: ' + selectedSize : ''}\nQty: ${qty}\nPrice: ₹${(currentProduct.price * qty).toLocaleString('en-IN')}\n\nPlease confirm availability and share payment details.`
+    );
+    waBtn.href = `https://wa.me/${waNumber}?text=${msg}`;
+  }
 
+  // Size buttons
+    const sizeWrap   = document.getElementById('size-selector-wrap');
+    const sizeOpts   = document.getElementById('size-options');
+    sizeOpts.innerHTML = '';
     if (currentProduct.sizes.length) {
       sizeWrap.style.display = 'block';
       currentProduct.sizes.forEach(s => {
@@ -442,11 +426,9 @@ function initProductModal() {
         btn.textContent = s;
         btn.addEventListener('click', () => {
           selectedSize = s;
-          sizeOpts.querySelectorAll('.size-btn')
-                  .forEach(b => b.classList.remove('selected'));
+          sizeOpts.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
-          // Update WhatsApp link whenever size changes
-          if (waBtn) waBtn.href = buildWhatsAppLink();
+          refreshWhatsAppLink();
         });
         sizeOpts.appendChild(btn);
       });
@@ -454,8 +436,19 @@ function initProductModal() {
       sizeWrap.style.display = 'none';
     }
 
-    // Set initial WhatsApp link
-    if (waBtn) waBtn.href = buildWhatsAppLink();
+    // Product image placeholder
+    const imgDiv = document.getElementById('product-modal-img');
+    imgDiv.textContent = 'Photo';
+
+    // Build WhatsApp link
+    const waBtn = document.getElementById('order-whatsapp-btn');
+    if (waBtn) {
+      const waNumber = '918854844334'; // REPLACE: your WhatsApp number with country code, no +
+      const msg = encodeURIComponent(
+        `Hi! I'd like to order:\n*${currentProduct.name}*${selectedSize ? ' — Size: ' + selectedSize : ''}\nQty: ${qty}\nPrice: ₹${currentProduct.price.toLocaleString('en-IN')}\n\nPlease confirm availability and share payment details.`
+      );
+      waBtn.href = `https://wa.me/${waNumber}?text=${msg}`;
+    }
 
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -466,7 +459,7 @@ function initProductModal() {
     document.body.style.overflow = '';
   }
 
-  // Open modal on merch card click
+  // Attach to all non-sold-out merch cards
   document.querySelectorAll('.merch-card').forEach(card => {
     card.addEventListener('click', () => openProductModal(card));
     card.addEventListener('keydown', e => {
@@ -474,47 +467,31 @@ function initProductModal() {
     });
   });
 
-  // Close modal
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (modal)    modal.addEventListener('click', e => {
-    if (e.target === modal) closeModal();
-  });
+  if (closeBtn)  closeBtn.addEventListener('click', closeModal);
+  if (modal)     modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
 
-  // Quantity — minus
   if (qtyMinus) qtyMinus.addEventListener('click', () => {
     qty = Math.max(1, qty - 1);
     if (qtyVal) qtyVal.textContent = qty;
-    // Update WhatsApp link whenever qty changes
-    if (waBtn) waBtn.href = buildWhatsAppLink();
+    refreshWhatsAppLink();
   });
-
-  // Quantity — plus
   if (qtyPlus) qtyPlus.addEventListener('click', () => {
     qty = Math.min(10, qty + 1);
     if (qtyVal) qtyVal.textContent = qty;
-    // Update WhatsApp link whenever qty changes
-    if (waBtn) waBtn.href = buildWhatsAppLink();
+    refreshWhatsAppLink();
   });
 
-  // Add to cart (keeps existing cart functionality)
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
       if (!currentProduct) return;
-      const existing = cart.find(
-        i => i.name === currentProduct.name && i.size === selectedSize
-      );
+      // Check if same item+size already in cart
+      const existing = cart.find(i => i.name === currentProduct.name && i.size === selectedSize);
       if (existing) {
         existing.qty = Math.min(10, existing.qty + qty);
       } else {
-        cart.push({
-          name:  currentProduct.name,
-          price: currentProduct.price,
-          size:  selectedSize,
-          qty
-        });
+        cart.push({ name: currentProduct.name, price: currentProduct.price, size: selectedSize, qty });
       }
-      saveCart();
-      updateCartCount();
+      saveCart(); updateCartCount();
       closeModal();
 
       // Brief flash on cart button
@@ -530,67 +507,7 @@ function initProductModal() {
     if (e.key === 'Escape' && modal && modal.classList.contains('open')) closeModal();
   });
 }
-/* =====================================================
-   CHECKOUT
-===================================================== */
-function openCheckout() {
-  const modal   = document.getElementById('checkout-modal');
-  const summary = document.getElementById('checkout-order-summary');
 
-  if (!modal) return;
-
-  const lines = cart.map(i =>
-    `${i.name}${i.size ? ' (' + i.size + ')' : ''} × ${i.qty} — ₹ ${(i.price * i.qty).toLocaleString('en-IN')}`
-  ).join('<br>');
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  if (summary) summary.innerHTML = lines + `<br><br><strong style="color:var(--silver)">Total: ₹ ${total.toLocaleString('en-IN')}</strong>`;
-
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function initCheckout() {
-  const modal    = document.getElementById('checkout-modal');
-  const closeBtn = document.getElementById('checkout-close');
-  const form     = document.getElementById('checkout-form');
-  const confirmed = document.getElementById('order-confirmed-modal');
-  const confirmedClose = document.getElementById('order-confirmed-close');
-
-  if (!modal) return;
-
-  function closeCheckout() {
-    modal.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  if (closeBtn) closeBtn.addEventListener('click', closeCheckout);
-  modal.addEventListener('click', e => { if (e.target === modal) closeCheckout(); });
-
-  if (form) {
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      // REPLACE: send form data + cart to your backend / Formspree / email service
-      closeCheckout();
-      cart = [];
-      saveCart(); updateCartCount();
-      if (confirmed) {
-        confirmed.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-    });
-  }
-
-  if (confirmedClose) {
-    confirmedClose.addEventListener('click', () => {
-      confirmed.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('open')) closeCheckout();
-  });
-}
 
 /* =====================================================
    FORMS — newsletter + contact
@@ -634,6 +551,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initStoryPage();
   initCart();
   initProductModal();
-  initCheckout();
   initForms();
 });
