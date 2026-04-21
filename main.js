@@ -400,7 +400,9 @@ function initProductModal() {
 
     document.getElementById('product-modal-tag').textContent  = currentProduct.tag;
     document.getElementById('product-modal-name').textContent = currentProduct.name;
-    document.getElementById('product-modal-price').textContent = `₹ ${currentProduct.price.toLocaleString('en-IN')} / £ ${currentProduct.priceGbp}`;
+    document.getElementById('product-modal-price').textContent = currentProduct.priceGbp
+      ? `₹ ${currentProduct.price.toLocaleString('en-IN')} / £ ${currentProduct.priceGbp}`
+      : `₹ ${currentProduct.price.toLocaleString('en-IN')}`;
     document.getElementById('product-modal-desc').textContent = currentProduct.desc;
     if (qtyVal) qtyVal.textContent = 1;
 
@@ -436,9 +438,19 @@ function initProductModal() {
       sizeWrap.style.display = 'none';
     }
 
-    // Product image placeholder
+    // Product image
     const imgDiv = document.getElementById('product-modal-img');
-    imgDiv.textContent = 'Photo';
+    imgDiv.innerHTML = '';
+    const cardImg = card.querySelector('.merch-image img');
+    if (cardImg) {
+      const mi = document.createElement('img');
+      mi.src = cardImg.src;
+      mi.alt = currentProduct.name;
+      mi.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+      imgDiv.appendChild(mi);
+    } else {
+      imgDiv.textContent = 'Photo';
+    }
 
     // Build WhatsApp link
     const waBtn = document.getElementById('order-whatsapp-btn');
@@ -458,6 +470,32 @@ function initProductModal() {
     modal.classList.remove('open');
     document.body.style.overflow = '';
   }
+
+  // Color swatch switchers
+  document.querySelectorAll('.merch-colors').forEach(wrap => {
+    wrap.querySelectorAll('.color-dot').forEach(dot => {
+      dot.addEventListener('click', e => {
+        e.stopPropagation();
+        const img = dot.closest('.merch-card').querySelector('.merch-image img');
+        if (img && dot.dataset.img) img.src = dot.dataset.img;
+        wrap.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        dot.classList.add('active');
+      });
+    });
+  });
+
+  // Model chip switchers (phone cases)
+  document.querySelectorAll('.merch-models').forEach(wrap => {
+    wrap.querySelectorAll('.model-chip').forEach(chip => {
+      chip.addEventListener('click', e => {
+        e.stopPropagation();
+        const img = chip.closest('.merch-card').querySelector('.merch-image img');
+        if (img && chip.dataset.img) img.src = chip.dataset.img;
+        wrap.querySelectorAll('.model-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+  });
 
   // Attach to all non-sold-out merch cards
   document.querySelectorAll('.merch-card').forEach(card => {

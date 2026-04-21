@@ -321,8 +321,17 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
 }
 .section-title {
   font-family: var(--font-head);
-  font-size: clamp(2.5rem, 8vw, 7rem);
+  font-size:  clamp(1.8rem, 5vw, 4rem);
   font-weight: 300; letter-spacing: 0.08em; line-height: 1; margin-bottom: 4rem;
+}
+.tour-subtitle {
+  font-family: var(--font-head);
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text2);
+  margin-bottom: 3rem;
 }
 
 /* Buttons */
@@ -517,7 +526,7 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
 .story-stage-bg {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
-  opacity: 0.18;
+  opacity: 0.40;
 }
 .story-stage-content {
   position: relative; z-index: 2;
@@ -542,12 +551,13 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
 .story-stage-subtitle {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(1rem, 2.5vw, 1.6rem); font-weight: 200; font-style: italic;
-  color: var(--silver); margin-bottom: 2.5rem;
+  color: #fff; margin-bottom: 2.5rem;
 }
 .story-stage-text p {
   font-size: clamp(0.9rem, 1.6vw, 1.05rem);
   line-height: 1.9; color: var(--text2);
   margin-bottom: 2rem;
+  color: #fff;
 }
 .story-stage-images {
   display: grid;
@@ -807,6 +817,31 @@ section { padding: clamp(4rem, 8vw, 8rem) 0; }
   font-size: 0.85rem; color: var(--silver);
   margin-top: auto; padding-top: 0.75rem;
 }
+.merch-subtitle {
+  font-size: 0.65rem; letter-spacing: 0.15em;
+  color: var(--text2); text-transform: uppercase;
+}
+.merch-colors {
+  display: flex; gap: 0.45rem; margin-top: 0.4rem;
+}
+.color-dot {
+  width: 15px; height: 15px; border-radius: 50%;
+  border: 2px solid transparent; outline: 1px solid transparent;
+  cursor: pointer; padding: 0; transition: outline-color 0.2s, border-color 0.2s;
+}
+.color-dot.active,
+.color-dot:hover { outline-color: var(--silver); border-color: var(--surface1); }
+.merch-models {
+  display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem;
+}
+.model-chip {
+  font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.2rem 0.5rem; border: 1px solid var(--border);
+  background: transparent; color: var(--text2); cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.model-chip.active,
+.model-chip:hover { border-color: var(--silver); color: var(--silver); }
 .merch-sold-out .merch-image { opacity: 0.4; }
 .merch-badge {
   position: absolute;
